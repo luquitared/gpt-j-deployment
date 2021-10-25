@@ -26,3 +26,7 @@ async def root(output: Output):
 
     print(gen_text)
     return {"message": gen_text}
+
+@app.get("/ping")
+async def ping():
+    return {"message": "pong"}
