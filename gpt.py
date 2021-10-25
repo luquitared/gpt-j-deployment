@@ -1,15 +1,19 @@
 from transformers import AutoTokenizer, AutoModelForCausalLM
 from fastapi import FastAPI
+from pydantic import BaseModel
 
 app = FastAPI()
 
+class Output(BaseModel):
+    result: str
   
 tokenizer = AutoTokenizer.from_pretrained("EleutherAI/gpt-j-6B")
 
 model = AutoModelForCausalLM.from_pretrained("EleutherAI/gpt-j-6B", revision="float16", torch_dtype=torch.float16, low_cpu_mem_usage=True)
 
-@app.get("/")
-async def root():
+@app.post("/")
+async def root(output: Output):
+    print(output)
     prompt = "In a shocking finding, scientists discovered a herd of unicorns living in a remote, " \
     "previously unexplored valley, in the Andes Mountains. Even more surprising to the " \
     "researchers was the fact that the unicorns spoke perfect English."
